@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:8001"); // Connect to backend
+const socket = io("http://localhost:5000"); // Connect to backend
 
 export default function Chat() {
     const [messages, setMessages] = useState([]);
@@ -38,8 +38,8 @@ export default function Chat() {
                         value={currentUser}
                         onChange={(e) => setCurrentUser(e.target.value)}
                     >
-                        <option value="Alice">Alice</option>
-                        <option value="Bob">Bob</option>
+                        <option value="Buyer">Buyer</option>
+                        <option value="Seller">Seller</option>
                     </select>
                 </div>
 

@@ -1,79 +1,118 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+require("dotenv").config();
 
+const PORT = 8001; // Server port
 const app = express();
-app.use(cors());
+const server = http.createServer(app); // HTTP server for Express & Socket.io
 
-const server = http.createServer(app);
+// Configure Socket.io
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: ["http://localhost:3000", "http://localhost:3001"], // Allow frontend connections
         methods: ["GET", "POST"]
     }
 });
 
-const users = {}; // Store connected users with socket IDs as keys
+// MongoDB Connection
+mongoose.connect("mongodb://127.0.0.1:27017/PBL")
+    .then(() => console.log("MongoDB Connected"))
+    .catch((error) => console.error("MongoDB Connection Failed:", error));
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    methods: ["GET", "POST"],
+    credentials: true
+}));
+
+// REST API Routes
+const authRoutes = require("./router/authRoutes");
+app.use("/api/auth", authRoutes);
+
+// WebSocket Logic
+const chatUsers = {};
+const buyers = [];
+const sellers = {};
+const chatPairs = {}; // Track assigned chat pairs
 
 io.on("connection", (socket) => {
-    console.log("User connected:", socket.id);
+    console.log(`User connected: ${socket.id}`);
 
-    // Handle username registration
-    socket.on("join_chat", (username) => {
-        // Validate username
-        if (typeof username !== 'string' || !['alice', 'bob'].includes(username.toLowerCase())) {
-            socket.emit("error", "Invalid username. Only Alice/Bob allowed");
-            return;
+    socket.on("join_chat", ({ username, role }) => {
+        chatUsers[socket.id] = { username, role };
+        console.log(`${username} (${role}) joined chat`);
+
+        if (role === "buyer") {
+            if (Object.keys(sellers).length > 0) {
+                let sellerId = Object.keys(sellers)[0];
+                chatPairs[socket.id] = sellerId;
+                chatPairs[sellerId] = socket.id;
+
+                io.to(socket.id).emit("assign_partner", chatUsers[sellerId].username);
+                io.to(sellerId).emit("assign_partner", username);
+
+                delete sellers[sellerId];
+            } else {
+                buyers.push(socket.id);
+            }
+        } else if (role === "seller") {
+            sellers[socket.id] = { username };
+
+            if (buyers.length > 0) {
+                let buyerId = buyers.shift();
+                chatPairs[socket.id] = buyerId;
+                chatPairs[buyerId] = socket.id;
+
+                io.to(socket.id).emit("assign_partner", chatUsers[buyerId].username);
+                io.to(buyerId).emit("assign_partner", username);
+            }
         }
 
-        // Check if username is already taken
-        if (Object.values(users).includes(username)) {
-            socket.emit("username_taken", "Username already in use");
-            return;
-        }
-
-        // Register user
-        users[socket.id] = username;
-        console.log(`${username} joined the chat`);
-        
-        // Notify all clients
-        io.emit("update_users", Object.values(users));
-        socket.emit("join_success", `Joined as ${username}`);
+        io.emit("update_users", Object.values(chatUsers));
     });
 
-    // Handle message sending
-    socket.on("send_message", (message) => {
-        const sender = users[socket.id];
-        
-        // Verify user is registered
-        if (!sender) {
-            socket.emit("error", "Join the chat before sending messages");
-            return;
-        }
-
-        // Validate message
-        if (typeof message !== 'string' || message.trim() === '') {
-            socket.emit("error", "Invalid message");
-            return;
-        }
-
-        const data = { sender, message: message.trim() };
+    socket.on("send_message", (data) => {
         console.log(`Message from ${data.sender}: ${data.message}`);
-        io.emit("receive_message", data); // Broadcast verified message
+        const recipientSocket = chatPairs[socket.id];
+
+        if (recipientSocket) {
+            io.to(recipientSocket).emit("receive_message", data);
+        }
     });
 
-    // Handle disconnection
     socket.on("disconnect", () => {
-        const username = users[socket.id];
-        if (username) {
-            console.log(`${username} disconnected`);
-            delete users[socket.id];
-            io.emit("update_users", Object.values(users));
+        if (chatUsers[socket.id]) {
+            console.log(`${chatUsers[socket.id].username} disconnected`);
+            delete chatUsers[socket.id];
+
+            if (buyers.includes(socket.id)) {
+                buyers.splice(buyers.indexOf(socket.id), 1);
+            }
+
+            if (sellers[socket.id]) {
+                delete sellers[socket.id];
+            }
+
+            if (chatPairs[socket.id]) {
+                let partnerId = chatPairs[socket.id];
+                io.to(partnerId).emit("partner_disconnected");
+
+                delete chatPairs[partnerId];
+                delete chatPairs[socket.id];
+            }
+
+            io.emit("update_users", Object.values(chatUsers));
         }
     });
 });
 
-server.listen(8001, () => {
-    console.log("Secure chat server running on port 8001");
+// Start the server
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} (REST + WebSocket)`);
 });

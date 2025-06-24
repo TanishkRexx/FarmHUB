@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 export default function Shhipping() {
   const [paymentMethod, setPaymentMethod] = useState('card');
-  const [amount,SetAmount] = useState('');
+  // const [amount,SetAmount] = useState('');
 
-  
+  const total = sessionStorage.getItem('total')|| 0;
+
   const handlePaymentChange = (event) => {
     setPaymentMethod(event.target.value);
   };
@@ -57,7 +58,7 @@ export default function Shhipping() {
                   <input type="text" placeholder="Card Number" className="w-full p-2 border rounded mb-2" />
                   <input type="text" placeholder="Name on Card" className="w-full p-2 border rounded mb-2" />
                   <input type="text" placeholder="Expiration Date (MM/YY)" className="w-full p-2 border rounded mb-2" />
-                  <input type="text" placeholder="CVC" className="w-full p-2 border rounded" />
+                  <input type="text" placeholder="CVV" className="w-full p-2 border rounded" />
                 </div>
               )}
             </div>
@@ -66,19 +67,7 @@ export default function Shhipping() {
             <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
             <div className="flex justify-between py-2 border-b">
               <span>Subtotal</span>
-              <span id="subtotal">64.00 INR</span>
-            </div>
-            <div className="flex justify-between py-2 border-b">
-              <span>Shipping</span>
-              <span id="shipping">5.00 INR</span>
-            </div>
-            <div className="flex justify-between py-2 border-b">
-              <span>Taxes</span>
-              <span id="taxes">5.52 INR</span>
-            </div>
-            <div className="flex justify-between font-semibold text-lg py-2">
-              <span>Total</span>
-              <span id="total">75.52 INR</span>
+              <span id="subtotal">{total} INR</span>
             </div>
             <button className="w-full mt-6 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700" onClick={purchaseDone}>Confirm Order</button>
           </div>

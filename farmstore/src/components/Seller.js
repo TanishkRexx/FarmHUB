@@ -117,7 +117,7 @@ export default function Seller() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white rounded-xl shadow-md overflow-hidden p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">List Your Product {id} id</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">List Your Product </h1>
           
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -28,7 +28,12 @@ export default function Cart() {
       [index]: Math.max((prev[index] || 1) - 1, 1)
     }));
   };
+// My Domain
 
+
+ /// Here 
+
+  /////
   // Fetch seller's inventory
   useEffect(() => {
     const fetchcart = async () => {
@@ -48,10 +53,12 @@ export default function Cart() {
     };
     fetchcart();
   }, [id, role]);
-
+  
   // Calculate subtotal with proper schema field
   const subtotal = items.reduce((sum, item, index) => 
     sum + ((item.pricePerKg || 0) * (quantities[index] || 1)), 0);
+  
+  sessionStorage.setItem('total',subtotal.toFixed(2));
 
   if (loading) {
     return (
@@ -89,7 +96,7 @@ export default function Cart() {
                     <div key={index} className="p-6 flex flex-col sm:flex-row gap-6">
                       <div className="w-full sm:w-48 h-48 bg-gray-100 rounded-lg overflow-hidden">
                         <img 
-                          src={item.img_path || "https://via.placeholder.com/150"} 
+                          src={item.img} 
                           alt={item.productName}
                           className="w-full h-full object-cover"
                         />
@@ -146,6 +153,7 @@ export default function Cart() {
                           >
                             Remove
                           </button>
+                          
                         </div>
                       </div>
                     </div>
@@ -185,7 +193,7 @@ export default function Cart() {
               <div className="text-center p-12">
                 <h3 className="text-xl font-medium text-gray-700 mb-2">No products in your inventory</h3>
                 <button
-                  onClick={() => navigate('/add-product')}
+                  onClick={() => navigate('/itemType')}
                   className="mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
                 >
                   Add New Product
@@ -208,9 +216,16 @@ export default function Cart() {
                           <h2 className="text-xl font-semibold text-gray-800">{item.productName}</h2>
                           <div className="mt-4 space-y-2 text-sm text-gray-600">
                             <div>Category: {item.categoryName || 'Vegetables'}</div>
+                            <div>Product: {item.seedName }</div>
                             <div>Available Stock: {item.quantity} kg</div>
                             <div>Price: ₹{(item.pricePerKg || 0).toFixed(2)} per kg</div>
                             <div>Total Value: ₹{((item.pricePerKg || 0) * (item.quantity || 0)).toFixed(2)}</div>
+                            <div
+                            className="text-red-600 hover:text-red-800 text-sm font-medium"
+                            onClick={() => navigate('/negotiate')}
+                          >
+                            Negotiate
+                          </div>
                           </div>
                         </div>
                       </div>

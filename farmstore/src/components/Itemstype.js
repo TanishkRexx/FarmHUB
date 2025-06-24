@@ -81,6 +81,7 @@ export default function Itemstype() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [real,setReal] = useState([])
+  const [img,setImg] = useState("");
 
   const [item, setItem] = useState({
     address: store[0].address,
@@ -88,6 +89,8 @@ export default function Itemstype() {
     quantity: store[0].quantity,
     distance_km: store[0].distance_km,
   });
+
+  
 
   const handleItems = (selectedItem) => {
     setItem({
@@ -105,6 +108,7 @@ export default function Itemstype() {
       try {
           const selectedItem = JSON.parse(localStorage.getItem("selectedItem"));
           console.log("ItemType.js",selectedItem);
+          setImg(selectedItem.imgAdd);
           
           if (!selectedItem) {
               alert("No item Selected");
@@ -127,49 +131,58 @@ export default function Itemstype() {
   return (
     <div className="Container">
         <div className="list-1">
-          {/* Real data first */}
-          {real.map((e) => (
-            <div className="document" key={`real-${e._id}`}
-              onClick={() => handleItems({
-                address: e.address,
-                seed_breed: e.seedName,
-                quantity: e.quantity,
-                distance_km: 30, // Default distance
-                price: e.pricePerKg
-              })}>
-              {e.address} <br />
-              Seed: {e.seedName} <br />
-              Quantity: {e.quantity} kg<br/>
-              Price: {e.pricePerKg} per kg
-            </div>
-          ))}
+        {/* // In your list-1 div, change this: */}
+{real.map((e) => (
+    <div className="document" key={`real-${e._id}`}
+        onClick={() => handleItems({
+            address: e.address,
+            seed_breed: e.seedName,
+            quantity: e.quantity,
+            distance_km: 30,
+            price: e.pricePerKg
+        })}>
+        {e.address} <br />
+        Seed: {e.seedName} <br />
+        Quantity: {e.quantity} kg<br/>
+        Price: {e.pricePerKg} per kg
+    </div>
+))}
 
-          {/* Dummy data if no real data exists */}
-          {real.length === 0 && store.map((e) => (
-            <div className="document" key={`dummy-${e.address}`}
-              onClick={() => handleItems(e)}>
-              {e.address} <br />
-              Seed: {e.seed_breed} <br />
-              Quantity: {e.quantity} kg<br/>
-              Price: {e.price} per kg
-            </div>
-          ))}
+{/* // And change this: */}
+{real.length === 0 && store.map((e) => (
+    <div className="document" key={`dummy-${e.address}`}
+        onClick={() => handleItems(e)}>
+        {e.address} <br />
+        Seed: {e.seed_breed} <br />
+        Quantity: {e.quantity} kg<br/>
+        Price: {e.price} per kg
+    </div>
+))}
         </div>
-        <div className="list-2">
-            <div className="main">
-              <img src="/Img/download.jpeg" alt="" />
+        <div className="list-2 m-[5px] p-2.5 w-2/5 bg-[#e6f5e0] sticky top-0 self-start h-[76vh] rounded-[3px] overflow-y-auto">
+    <div className="main p-4 border rounded-lg shadow-md">
+        <img 
+            src={img} 
+            alt="" 
+            className="w-full h-48 md:h-56 lg:h-64 object-cover object-center rounded-md mb-4" 
+        />
               <p>Address: {item.address}</p>
               <p> 
                 <span>Seed: {item.seed_breed}</span>
                 <span>Distance: {item.distance_km} km</span>
               </p>
               <p>
-              <span>Quantity: {item.quantity} kg</span>
-              <span onClick={()=> navigate('/negotiate')}>Negotiate</span>
-              <span>Price:{item.price} per kg</span>
+               <span>Quantity: {item.quantity} kg</span>
+                   <button 
+                       onClick={() => navigate('/negotiate')} 
+                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+                    >
+                       Negotiate
+                   </button>
+                <span>Price: {item.price} per kg</span>
               </p>
               <button onClick={()=> dispatch(addItem({seed_breed: item.seed_breed,quantity:item.quantity,pricePerKg:item.price,
-                category:item.categoryName
+                category:item.categoryName,img:img,
               }))}>Add To WishList </button>
             </div>
 

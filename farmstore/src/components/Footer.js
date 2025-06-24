@@ -1,7 +1,9 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
+// import { subscribe } from "../../../Server/router/authRoutes";
 
 export default function Footer() {
+  const [subscribe,setSubscribe] = useState("");
   return (
     <div>
       <footer className="bg-gray-50">
@@ -12,10 +14,9 @@ export default function Footer() {
               <h3 className="font-bold text-lg mb-4">GET IN TOUCH WITH US</h3>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  Address: Mirach Innovations FZ-LLC, 1st Floor, In5 Media
-                  Centre, Dubai Production City Dubai, UAE.
+                  Address: Pimpri-Chinchwad College of Engineering and Research, Ravet, Pune.
                 </p>
-                <p>Phone: +91 7483721529</p>
+                <p>Phone: +91 8856009476</p>
                 <p>
                   Delivery Timings:
                   <br />
@@ -25,7 +26,7 @@ export default function Footer() {
                   <br />
                   Sunday: Closed
                 </p>
-                <p>info@fasalmandi.in</p>
+                <p>farmhub.in</p>
               </div>
             </div>
 
@@ -80,8 +81,13 @@ export default function Footer() {
                   type="email"
                   placeholder="Enter your email"
                   className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-700"
+                  value={subscribe}
+                  onChange={()=>setSubscribe(subscribe)}
                 />
-                <button className="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-md">
+                <button className="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-md
+                " onClick={()=>
+                  alert("You will Get Notifications from now on")
+                }>
                   Subscribe
                 </button>
               </div>
@@ -91,7 +97,7 @@ export default function Footer() {
           {/* Bottom Bar */}
           <div className="border-t mt-12 pt-6 flex flex-col md:flex-row justify-center items-center">
             <p className="text-gray-600 text-sm text-center">
-              ©2024 Fasal Mandi - All Rights Reserved.
+              ©2025 FarmHub - All Rights Reserved.
             </p>
           </div>
         </div>
