@@ -159,34 +159,50 @@ export default function Itemstype() {
     </div>
 ))}
         </div>
-        <div className="list-2 m-[5px] p-2.5 w-2/5 bg-[#e6f5e0] sticky top-0 self-start h-[76vh] rounded-[3px] overflow-y-auto">
-    <div className="main p-4 border rounded-lg shadow-md">
-        <img 
-            src={img} 
-            alt="" 
-            className="w-full h-48 md:h-56 lg:h-64 object-cover object-center rounded-md mb-4" 
-        />
-              <p>Address: {item.address}</p>
-              <p> 
-                <span>Seed: {item.seed_breed}</span>
-                <span>Distance: {item.distance_km} km</span>
-              </p>
-              <p>
-               <span>Quantity: {item.quantity} kg</span>
-                   <button 
-                       onClick={() => navigate('/negotiate')} 
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
-                    >
-                       Negotiate
-                   </button>
-                <span>Price: {item.price} per kg</span>
-              </p>
-              <button onClick={()=> dispatch(addItem({seed_breed: item.seed_breed,quantity:item.quantity,pricePerKg:item.price,
-                category:item.categoryName,img:img,
-              }))}>Add To WishList </button>
-            </div>
+        <div className="list-2 m-2 p-4 w-2/5 bg-white rounded-2xl shadow-lg sticky top-5 self-start h-fit">
+  <div className="flex flex-col items-center">
+    {/* Product Image */}
+    <div className="w-full overflow-hidden rounded-xl shadow-md mb-4">
+      <img
+        src={img || "https://images.unsplash.com/photo-1598966733531-9449e31f50df?w=600"}
+        alt={item.seed_breed}
+        className="w-full h-64 object-cover object-center transform hover:scale-105 transition-transform duration-500"
+      />
+    </div>
 
-        </div>
+    {/* Product Info */}
+    <div className="w-full p-4 flex flex-col gap-2">
+      <h2 className="text-2xl font-bold text-green-800">{item.seed_breed}</h2>
+      <p className="text-gray-600"><span className="font-semibold">Address:</span> {item.address}</p>
+      <p className="text-gray-600"><span className="font-semibold">Distance:</span> {item.distance_km} km</p>
+      <p className="text-gray-600"><span className="font-semibold">Quantity:</span> {item.quantity} kg</p>
+      <p className="text-green-700 text-xl font-semibold">Price: ₹{item.price} per kg</p>
+    </div>
+
+    {/* Buttons */}
+    <div className="w-full flex gap-3 mt-4">
+      <button
+        onClick={() => navigate('/negotiate')}
+        className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+      >
+        Negotiate
+      </button>
+      <button
+        onClick={() => dispatch(addItem({
+          seed_breed: item.seed_breed,
+          quantity: item.quantity,
+          pricePerKg: item.price,
+          category: item.categoryName,
+          img: img
+        }))}
+        className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+      >
+        Add to Wishlist
+      </button>
+    </div>
+  </div>
+</div>
+
     </div>
   );
 }
