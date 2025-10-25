@@ -181,12 +181,15 @@ export default function Itemstype() {
 
     {/* Buttons */}
     <div className="w-full flex gap-3 mt-4">
-      <button
-        onClick={() => navigate('/negotiate')}
-        className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
-      >
-        Negotiate
-      </button>
+<button
+  onClick={() =>
+    navigate("/negotiate", { state: { item: item } })
+  }
+  className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+>
+  Negotiate
+</button>
+
       <button
         onClick={() => dispatch(addItem({
           seed_breed: item.seed_breed,

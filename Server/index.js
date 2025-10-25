@@ -35,6 +35,10 @@ app.use(cors({
 const authRoutes = require("./router/authRoutes");
 app.use("/api/auth", authRoutes);
 
+const paymentRoutes = require("./router/paymentRoutes");
+app.use("/api/payment", paymentRoutes);
+
+
 // WebSocket Logic
 const chatUsers = {};
 const buyers = [];
