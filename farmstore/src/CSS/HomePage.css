@@ -1,84 +1,117 @@
-.container1{
+/* Container for all category sections */
+.container1 {
     padding: 30px;
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    flex-direction: column;
+    background: linear-gradient(135deg, #e0f7e5, #d7e9d6);
 }
-.box{
+
+/* Main category box */
+.box {
     height: 90%;
     width: 90%;
-    border-radius: 8px;
-    box-shadow: 0 0 20px 8px rgb(230, 229, 229);
-    display:flex;
-    transition: 100ms;
-    margin-bottom: 15px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
     background-color: #d7e9d6;
+    cursor: pointer;
 }
-.box:hover{
-    height: 92%;
-    width: 91%;
+
+.box:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
 }
-.box:active{
-    height: 74.5%;
-    width: 91.5% ;
+
+.box:active {
+    transform: translateY(2px) scale(0.98);
 }
-.product-name-box{
+
+/* Category name section */
+.product-name-box {
     width: 24%;
     height: 100%;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', sans-serif;
     font-weight: bold;
     font-size: x-large;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid rgb(112, 240, 43) ;
+    border-right: 2px solid rgb(112, 240, 43);
     margin-right: 5px;
+    transition: all 0.3s ease;
 }
-.product-container{
+
+.product-name-box:hover {
+    color: #2a7a2f;
+    transform: scale(1.05);
+}
+
+/* Products container */
+.product-container {
     height: 100%;
     width: 80%;
     border-radius: 25px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
 }
-.product{
+
+/* Individual product card */
+.product {
     height: 90%;
     width: 25%;
-    border-radius: 5px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     background-color: #84ca82;
-    box-shadow: 0 0 20px 5px rgb(208, 207, 207);
-    margin: 3px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin: 5px;
+    transition: all 0.3s ease;
 }
 
-.product:hover{
-    height: 91%;
-    width: 26%;
-}
-.product:active{
-    height: 92%;
-    width: 27%; 
+.product:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.product img{
+.product:active {
+    transform: translateY(2px) scale(0.98);
+}
+
+/* Product image */
+.product img {
     padding: 3px;
-    height:70%;
+    height: 70%;
     width: 90%;
-    border-radius: 7px;
-    overflow: hidden;
+    border-radius: 12px;
+    object-fit: cover;
+    transition: all 0.3s ease;
 }
 
-.product p{
-    font-family:sans-serif;
+.product img:hover {
+    transform: scale(1.05) rotate(1deg);
+}
+
+/* Product name */
+.product p {
+    font-family: sans-serif;
     font-size: large;
-    font-weight: 100;
-    background-color: transparent; 
+    font-weight: 600;
     margin-top: 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.product p:hover {
+    color: #2a7a2f;
+    transform: scale(1.05);
 }
